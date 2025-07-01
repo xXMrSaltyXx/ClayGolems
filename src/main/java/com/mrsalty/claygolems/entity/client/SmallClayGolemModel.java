@@ -1,5 +1,6 @@
 package com.mrsalty.claygolems.entity.client;
 
+import com.mrsalty.claygolems.entity.animation.SmallClayGolemAnimations;
 import com.mrsalty.claygolems.entity.custom.SmallClayGolemEntity;
 import net.minecraft.client.model.Dilation;
 import net.minecraft.client.model.ModelData;
@@ -11,14 +12,15 @@ import net.minecraft.client.model.TexturedModelData;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.MathHelper;
 
 public class SmallClayGolemModel<T extends SmallClayGolemEntity> extends SinglePartEntityModel<T> {
-  private final ModelPart SmallClayGolem;
-  private final ModelPart Head;
+  private final ModelPart smallclaygolem;
+  private final ModelPart head;
 
   public SmallClayGolemModel(ModelPart root) {
-    this.SmallClayGolem = root.getChild("SmallClayGolem");
-    this.Head = SmallClayGolem.getChild("Torso").getChild("Head");
+    this.smallclaygolem = root.getChild("SmallClayGolem");
+    this.head = smallclaygolem.getChild("Torso").getChild("Head");
   }
 
   public static TexturedModelData getTexturedModelData() {
@@ -85,7 +87,21 @@ public class SmallClayGolemModel<T extends SmallClayGolemEntity> extends SingleP
       float limbSwingAmount,
       float ageInTicks,
       float netHeadYaw,
-      float headPitch) {}
+      float headPitch) {
+    this.getPart().traverse().forEach(ModelPart::resetTransform);
+    setHeadAngles(netHeadYaw, headPitch);
+
+    this.animateMovement(SmallClayGolemAnimations.WALK, limbSwing, limbSwingAmount, 2f, 2.5f);
+    this.updateAnimation(entity.idleAnimationState, SmallClayGolemAnimations.IDLE, ageInTicks, 1f);
+  }
+
+  private void setHeadAngles(float headYaw, float headPitch) {
+    headYaw = MathHelper.clamp(headYaw, -30.0F, 30.0F);
+    headPitch = MathHelper.clamp(headPitch, -25.0F, 45.0F);
+
+    head.yaw = (float) Math.toRadians(headYaw);
+    head.pitch = (float) Math.toRadians(headPitch);
+  }
 
   @Override
   public void render(
@@ -97,11 +113,11 @@ public class SmallClayGolemModel<T extends SmallClayGolemEntity> extends SingleP
       float green,
       float blue,
       float alpha) {
-    SmallClayGolem.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
+    smallclaygolem.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
   }
 
   @Override
   public ModelPart getPart() {
-    return SmallClayGolem;
+    return smallclaygolem;
   }
 }

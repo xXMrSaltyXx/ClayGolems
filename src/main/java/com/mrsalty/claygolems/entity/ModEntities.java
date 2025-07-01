@@ -22,6 +22,6 @@ public class ModEntities {
 
   public static void registerModEntityAttributes() {
     FabricDefaultAttributeRegistry.register(
-        SMALL_CLAY_GOLEM, SmallClayGolemEntity.createSmallClayGolemAttributes());
+        ModEntities.SMALL_CLAY_GOLEM, SmallClayGolemEntity.createSmallClayGolemAttributes());
   }
 }

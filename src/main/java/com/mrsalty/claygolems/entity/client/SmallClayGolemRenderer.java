@@ -15,7 +15,7 @@ public class SmallClayGolemRenderer
 
   public SmallClayGolemRenderer(Context context) {
     super(
-        context, new SmallClayGolemModel<>(context.getPart(ModModelLayers.SMALL_CLAY_GOLEM)), 0.7F);
+        context, new SmallClayGolemModel<>(context.getPart(ModModelLayers.SMALL_CLAY_GOLEM)), 0.2F);
   }
 
   @Override
@@ -31,6 +31,8 @@ public class SmallClayGolemRenderer
       MatrixStack matrixStack,
       VertexConsumerProvider vertexConsumerProvider,
       int i) {
+
+    matrixStack.scale(3.5F, 3.5F, 3.5F);
 
     super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
   }
