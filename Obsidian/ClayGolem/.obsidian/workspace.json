@@ -4,37 +4,24 @@
     "type": "split",
     "children": [
       {
-        "id": "2c10f49b26f2d8f9",
+        "id": "48397a4d70f34867",
         "type": "tabs",
         "children": [
           {
-            "id": "bec1eb62b09c67e4",
+            "id": "30b835e1f89e78a9",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "canvas",
               "state": {
-                "file": "Welcome.md",
-                "mode": "source",
-                "source": false
+                "file": "Plannung.canvas",
+                "viewState": {
+                  "x": 696.8327775131015,
+                  "y": 80.45212005717008,
+                  "zoom": -0.6137697262251602
+                }
               },
-              "icon": "lucide-file",
-              "title": "Welcome"
-            }
-          }
-        ]
-      },
-      {
-        "id": "57af4e9d59de2759",
-        "type": "tabs",
-        "children": [
-          {
-            "id": "2ec8307f2792870f",
-            "type": "leaf",
-            "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "icon": "lucide-layout-dashboard",
+              "title": "Plannung"
             }
           }
         ]
@@ -94,7 +81,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 211.5
   },
   "right": {
     "id": "bcbbb40a516debd3",
@@ -110,7 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Welcome.md",
+                "file": "Plannung.canvas",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -120,7 +107,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Welcome"
+              "title": "Backlinks for Plannung"
             }
           },
           {
@@ -129,12 +116,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Welcome.md",
+                "file": "Plannung.canvas",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Welcome"
+              "title": "Outgoing links from Plannung"
             }
           },
           {
@@ -158,13 +145,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Welcome.md",
+                "file": "Plannung.canvas",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Welcome"
+              "title": "Outline of Plannung"
             }
           }
         ]
@@ -184,8 +171,14 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "bec1eb62b09c67e4",
+  "active": "30b835e1f89e78a9",
   "lastOpenFiles": [
+    "Golem-Puppe.md",
+    "Plannung.canvas",
+    "Pasted image 20250701101836.png",
+    "Images/Small_Golem.png",
+    "Images",
+    "Untitled.md",
     "Welcome.md"
   ]
 }
