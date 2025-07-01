@@ -93,6 +93,8 @@ public class SmallClayGolemModel<T extends SmallClayGolemEntity> extends SingleP
 
     this.animateMovement(SmallClayGolemAnimations.WALK, limbSwing, limbSwingAmount, 2f, 2.5f);
     this.updateAnimation(entity.idleAnimationState, SmallClayGolemAnimations.IDLE, ageInTicks, 1f);
+    this.updateAnimation(
+        entity.attackAnimationState, SmallClayGolemAnimations.ATTACK, ageInTicks, 1f);
   }
 
   private void setHeadAngles(float headYaw, float headPitch) {

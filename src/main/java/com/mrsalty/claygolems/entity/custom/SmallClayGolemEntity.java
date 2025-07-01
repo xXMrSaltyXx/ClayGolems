@@ -1,15 +1,20 @@
 package com.mrsalty.claygolems.entity.custom;
 
 import com.mrsalty.claygolems.entity.ModEntities;
+import com.mrsalty.claygolems.entity.ai.SmallClayGolemAttackGoal;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.LookAroundGoal;
 import net.minecraft.entity.ai.goal.LookAtEntityGoal;
+import net.minecraft.entity.ai.goal.RevengeGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.PassiveEntity;
@@ -21,8 +26,15 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class SmallClayGolemEntity extends AnimalEntity {
+  private static final TrackedData<Boolean> ATTACKING =
+      DataTracker.registerData(SmallClayGolemEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+  public static final float ATTACK_RANGE = 2.0f;
+
   public final AnimationState idleAnimationState = new AnimationState();
   private int idleAnimationCooldown = 0;
+
+  public final AnimationState attackAnimationState = new AnimationState();
+  public int attackAnimationCooldown = 0;
 
   public SmallClayGolemEntity(EntityType<? extends AnimalEntity> entityType, World world) {
     super(entityType, world);
@@ -35,6 +47,31 @@ public class SmallClayGolemEntity extends AnimalEntity {
     } else {
       this.idleAnimationCooldown--;
     }
+
+    if (this.isAttacking() && this.attackAnimationCooldown <= 0) {
+      this.attackAnimationCooldown = this.random.nextInt(10) + 30;
+      this.attackAnimationState.start(this.age);
+    } else if (this.attackAnimationCooldown > 0) {
+      this.attackAnimationCooldown--;
+    }
+
+    if (!this.isAttacking()) {
+      this.attackAnimationState.stop();
+    }
+  }
+
+  public void setAttacking(boolean attacking) {
+    this.dataTracker.set(ATTACKING, attacking);
+  }
+
+  public boolean isAttacking() {
+    return this.dataTracker.get(ATTACKING);
+  }
+
+  @Override
+  protected void initDataTracker() {
+    super.initDataTracker();
+    this.dataTracker.startTracking(ATTACKING, false);
   }
 
   @Override
@@ -60,9 +97,12 @@ public class SmallClayGolemEntity extends AnimalEntity {
   @Override
   protected void initGoals() {
     this.goalSelector.add(0, new SwimGoal(this));
+    this.goalSelector.add(1, new SmallClayGolemAttackGoal(this, 1D, true));
     this.goalSelector.add(1, new WanderAroundFarGoal(this, 1.0f));
     this.goalSelector.add(2, new LookAtEntityGoal(this, PlayerEntity.class, 4f));
     this.goalSelector.add(3, new LookAroundGoal(this));
+
+    this.targetSelector.add(1, new RevengeGoal(this));
   }
 
   public static DefaultAttributeContainer.Builder createSmallClayGolemAttributes() {
