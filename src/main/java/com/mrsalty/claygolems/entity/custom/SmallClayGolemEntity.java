@@ -2,6 +2,7 @@ package com.mrsalty.claygolems.entity.custom;
 
 import com.mrsalty.claygolems.entity.ModEntities;
 import com.mrsalty.claygolems.entity.ai.SmallClayGolemAttackGoal;
+import com.mrsalty.claygolems.entity.animation.SmallClayGolemAnimations;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
@@ -49,7 +50,7 @@ public class SmallClayGolemEntity extends AnimalEntity {
     }
 
     if (this.isAttacking() && this.attackAnimationCooldown <= 0) {
-      this.attackAnimationCooldown = this.random.nextInt(10) + 30;
+      this.attackAnimationCooldown = (int) (20 * SmallClayGolemAnimations.ATTACK.lengthInSeconds());
       this.attackAnimationState.start(this.age);
     } else if (this.attackAnimationCooldown > 0) {
       this.attackAnimationCooldown--;
@@ -98,9 +99,9 @@ public class SmallClayGolemEntity extends AnimalEntity {
   protected void initGoals() {
     this.goalSelector.add(0, new SwimGoal(this));
     this.goalSelector.add(1, new SmallClayGolemAttackGoal(this, 1D, true));
-    this.goalSelector.add(1, new WanderAroundFarGoal(this, 1.0f));
-    this.goalSelector.add(2, new LookAtEntityGoal(this, PlayerEntity.class, 4f));
-    this.goalSelector.add(3, new LookAroundGoal(this));
+    this.goalSelector.add(2, new WanderAroundFarGoal(this, 1.0f));
+    this.goalSelector.add(3, new LookAtEntityGoal(this, PlayerEntity.class, 4f));
+    this.goalSelector.add(4, new LookAroundGoal(this));
 
     this.targetSelector.add(1, new RevengeGoal(this));
   }

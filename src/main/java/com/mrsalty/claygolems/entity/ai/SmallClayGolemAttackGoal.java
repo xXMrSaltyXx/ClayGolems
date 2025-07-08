@@ -1,28 +1,31 @@
 package com.mrsalty.claygolems.entity.ai;
 
+import com.mrsalty.claygolems.ClayGolems;
+import com.mrsalty.claygolems.entity.animation.SmallClayGolemAnimations;
 import com.mrsalty.claygolems.entity.custom.SmallClayGolemEntity;
+import net.minecraft.entity.Attackable;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.util.Hand;
 
 public class SmallClayGolemAttackGoal extends MeleeAttackGoal {
-  private final SmallClayGolemEntity entity;
-  private int attackDelay = 14;
-  private final int tickBetweenAttacks = 35;
-  private int ticksUntilNextAttack = 14;
+  private final SmallClayGolemEntity ENTITY;
+  private final int ATTACK_DELAY = 14;
+  private final float ANIMATION_LENGTH = SmallClayGolemAnimations.ATTACK.lengthInSeconds();
+  private int ticksUntilNextAttack = 0;
   private boolean shouldCountTillNextAttack = false;
+  private boolean animationRunning = false;
 
   public SmallClayGolemAttackGoal(PathAwareEntity mob, double speed, boolean pauseWhenMobIdle) {
     super(mob, speed, pauseWhenMobIdle);
-    entity = (SmallClayGolemEntity) mob;
+    ENTITY = (SmallClayGolemEntity) mob;
   }
 
   @Override
   public void start() {
     super.start();
-    attackDelay = 14;
-    ticksUntilNextAttack = 14;
+    ticksUntilNextAttack = ATTACK_DELAY;
   }
 
   @Override
@@ -30,32 +33,42 @@ public class SmallClayGolemAttackGoal extends MeleeAttackGoal {
     if (this.isEnemyInRange(target)) {
       shouldCountTillNextAttack = true;
 
-      if (this.isTimeToStartAttackAnimation()) {
-        entity.setAttacking(true);
+      if (isTimeToStartAttackAnimation() && !animationRunning) {
+        ENTITY.setAttacking(true);
+        animationRunning = true;
       }
 
-      if (this.isTimeToAttack()) {
+      if (isTimeToAttack() && animationRunning) {
         this.mob.getLookControl().lookAt(target);
         performAttack(target);
       }
     } else {
-      resetAttackCooldown();
-      shouldCountTillNextAttack = false;
-      entity.setAttacking(false);
-      entity.attackAnimationCooldown = 0;
+      if (animationRunning) {
+        shouldCountTillNextAttack = true;
+
+        if (isTimeToAttack()) {
+          this.mob.getLookControl().lookAt(target);
+          performAttack(target);
+        }
+      } else {
+        shouldCountTillNextAttack = false;
+        ENTITY.attackAnimationCooldown = 0;
+        resetAttackCooldown();
+        ENTITY.setAttacking(false);
+      }
     }
   }
 
   private boolean isEnemyInRange(LivingEntity target) {
-    return this.entity.distanceTo(target) <= SmallClayGolemEntity.ATTACK_RANGE;
+    return this.ENTITY.distanceTo(target) <= SmallClayGolemEntity.ATTACK_RANGE;
   }
 
   protected void resetAttackCooldown() {
-    ticksUntilNextAttack = getTickCount(attackDelay * 2);
+    ticksUntilNextAttack = this.getTickCount((int) (20 * ANIMATION_LENGTH));
   }
 
   protected boolean isTimeToStartAttackAnimation() {
-    return ticksUntilNextAttack <= attackDelay;
+    return ticksUntilNextAttack <= ATTACK_DELAY;
   }
 
   protected boolean isTimeToAttack() {
@@ -63,22 +76,27 @@ public class SmallClayGolemAttackGoal extends MeleeAttackGoal {
   }
 
   protected void performAttack(LivingEntity target) {
-    resetAttackCooldown();
     this.mob.swingHand(Hand.MAIN_HAND);
-    this.entity.tryAttack(target);
+
+    if (isEnemyInRange(target)) {
+      this.ENTITY.tryAttack(target);
+    }
+    resetAttackCooldown();
+    animationRunning = false;
   }
 
   @Override
   public void tick() {
     super.tick();
     if (shouldCountTillNextAttack) {
-      ticksUntilNextAttack = Math.max(--ticksUntilNextAttack, 0);
+      ticksUntilNextAttack = Math.max(ticksUntilNextAttack - 1, 0);
     }
   }
 
   @Override
   public void stop() {
-    entity.setAttacking(false);
+    animationRunning = false;
+    ENTITY.setAttacking(false);
     super.stop();
   }
 }

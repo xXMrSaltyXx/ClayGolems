@@ -136,7 +136,7 @@ public static final Animation WALK = Animation.Builder.create(1.25f).looping()
 			Transformation.Interpolations.CUBIC),
 		new Keyframe(1.25f, AnimationHelper.createRotationalVector(25f, 0f, 0f),
 			Transformation.Interpolations.CUBIC))).build();
-public static final Animation ATTACK = Animation.Builder.create(1.25f)
+public static final Animation ATTACK = Animation.Builder.create(1.25f).looping()
 .addBoneAnimation("Torso",
 	new Transformation(Transformation.Targets.TRANSLATE, 
 		new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),

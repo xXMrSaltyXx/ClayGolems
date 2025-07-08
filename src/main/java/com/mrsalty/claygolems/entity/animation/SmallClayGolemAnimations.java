@@ -285,6 +285,7 @@ public class SmallClayGolemAnimations {
           .build();
   public static final Animation ATTACK =
       Animation.Builder.create(1.25f)
+          .looping()
           .addBoneAnimation(
               "Torso",
               new Transformation(

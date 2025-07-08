@@ -7,9 +7,12 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.item.ItemGroups;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ClayGolems implements ModInitializer {
   public static final String MOD_ID = "claygolems";
+  public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
   @Override
   public void onInitialize() {
