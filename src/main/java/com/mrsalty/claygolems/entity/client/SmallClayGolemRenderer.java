@@ -14,8 +14,7 @@ public class SmallClayGolemRenderer
       new Identifier(ClayGolems.MOD_ID, "textures/entity/small_clay_golem.png");
 
   public SmallClayGolemRenderer(Context context) {
-    super(
-        context, new SmallClayGolemModel<>(context.getPart(ModModelLayers.SMALL_CLAY_GOLEM)), 0.2F);
+    super(context, new SmallClayGolemModel<>(context.getPart(ModModelLayers.SMALL_CLAY_GOLEM)), 1F);
   }
 
   @Override
@@ -32,7 +31,7 @@ public class SmallClayGolemRenderer
       VertexConsumerProvider vertexConsumerProvider,
       int i) {
 
-    matrixStack.scale(3.5F, 3.5F, 3.5F);
+    matrixStack.scale(1F, 1F, 1F);
 
     super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
   }

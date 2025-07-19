@@ -3,6 +3,7 @@ package com.mrsalty.claygolems.entity.custom;
 import com.mrsalty.claygolems.entity.ModEntities;
 import com.mrsalty.claygolems.entity.ai.SmallClayGolemAttackGoal;
 import com.mrsalty.claygolems.entity.animation.SmallClayGolemAnimations;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
@@ -23,6 +24,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -103,7 +105,7 @@ public class SmallClayGolemEntity extends AnimalEntity {
     this.goalSelector.add(3, new LookAtEntityGoal(this, PlayerEntity.class, 4f));
     this.goalSelector.add(4, new LookAroundGoal(this));
 
-    this.targetSelector.add(1, new RevengeGoal(this));
+    this.targetSelector.add(1, new RevengeGoal(this).setGroupRevenge());
   }
 
   public static DefaultAttributeContainer.Builder createSmallClayGolemAttributes() {

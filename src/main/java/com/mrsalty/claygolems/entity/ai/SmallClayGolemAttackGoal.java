@@ -50,6 +50,9 @@ public class SmallClayGolemAttackGoal extends MeleeAttackGoal {
           this.mob.getLookControl().lookAt(target);
           performAttack(target);
         }
+        if (isStartOfAttackAnimation()) {
+          animationRunning = false;
+        }
       } else {
         shouldCountTillNextAttack = false;
         ENTITY.attackAnimationCooldown = 0;
@@ -67,6 +70,10 @@ public class SmallClayGolemAttackGoal extends MeleeAttackGoal {
     ticksUntilNextAttack = this.getTickCount((int) (20 * ANIMATION_LENGTH));
   }
 
+  protected boolean isStartOfAttackAnimation() {
+    return ticksUntilNextAttack == ATTACK_DELAY;
+  }
+
   protected boolean isTimeToStartAttackAnimation() {
     return ticksUntilNextAttack <= ATTACK_DELAY;
   }
@@ -82,7 +89,6 @@ public class SmallClayGolemAttackGoal extends MeleeAttackGoal {
       this.ENTITY.tryAttack(target);
     }
     resetAttackCooldown();
-    animationRunning = false;
   }
 
   @Override
