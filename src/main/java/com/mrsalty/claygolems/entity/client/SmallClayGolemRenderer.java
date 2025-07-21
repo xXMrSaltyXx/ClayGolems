@@ -14,7 +14,7 @@ public class SmallClayGolemRenderer
       new Identifier(ClayGolems.MOD_ID, "textures/entity/small_clay_golem.png");
 
   public SmallClayGolemRenderer(Context context) {
-    super(context, new SmallClayGolemModel<>(context.getPart(ModModelLayers.SMALL_CLAY_GOLEM)), 1F);
+    super(context, new SmallClayGolemModel<>(context.getPart(ModModelLayers.SMALL_CLAY_GOLEM)), 0.75F);
   }
 
   @Override

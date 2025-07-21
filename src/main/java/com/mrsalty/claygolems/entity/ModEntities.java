@@ -17,7 +17,7 @@ public class ModEntities {
           Registries.ENTITY_TYPE,
           new Identifier(ClayGolems.MOD_ID, "small_clay_golem"),
           FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, SmallClayGolemEntity::new)
-              .dimensions(EntityDimensions.fixed(1F, 1F))
+              .dimensions(EntityDimensions.fixed(0.7F, 1F))
               .build());
 
   public static void registerModEntityAttributes() {

@@ -12,7 +12,7 @@ import net.minecraft.util.Hand;
 public class SmallClayGolemAttackGoal extends MeleeAttackGoal {
   private final SmallClayGolemEntity ENTITY;
   private final int ATTACK_DELAY = 14;
-  private final float ANIMATION_LENGTH = SmallClayGolemAnimations.ATTACK.lengthInSeconds();
+  private final float ANIMATION_LENGTH = SmallClayGolemAnimations.attack.lengthInSeconds();
   private int ticksUntilNextAttack = 0;
   private boolean shouldCountTillNextAttack = false;
   private boolean animationRunning = false;

@@ -26,58 +26,20 @@ public class SmallClayGolemModel<T extends SmallClayGolemEntity> extends SingleP
   public static TexturedModelData getTexturedModelData() {
     ModelData modelData = new ModelData();
     ModelPartData modelPartData = modelData.getRoot();
-    ModelPartData SmallClayGolem =
-        modelPartData.addChild(
-            "SmallClayGolem", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 24.0F, 0.0F));
+    ModelPartData SmallClayGolem = modelPartData.addChild("SmallClayGolem", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 25.0F, 0.0F));
 
-    ModelPartData Torso =
-        SmallClayGolem.addChild(
-            "Torso",
-            ModelPartBuilder.create()
-                .uv(0, 0)
-                .cuboid(-1.5F, -1.5F, -1.5F, 3.0F, 3.0F, 3.0F, new Dilation(0.0F)),
-            ModelTransform.pivot(0.0F, -2.5F, 0.0F));
+    ModelPartData Torso = SmallClayGolem.addChild("Torso", ModelPartBuilder.create().uv(0, 0).cuboid(-5.5F, -5.5F, -5.5F, 11.0F, 11.0F, 11.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, -10.5F, 0.0F));
 
-    ModelPartData Head =
-        Torso.addChild(
-            "Head",
-            ModelPartBuilder.create()
-                .uv(0, 6)
-                .cuboid(-1.0F, -0.5F, -1.0F, 2.0F, 1.0F, 2.0F, new Dilation(0.0F)),
-            ModelTransform.pivot(0.0F, -1.5F, 0.0F));
+    ModelPartData Head = Torso.addChild("Head", ModelPartBuilder.create().uv(0, 22).cuboid(-3.5F, -2.0F, -3.5F, 7.0F, 4.0F, 7.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, -5.5F, 0.0F));
 
-    ModelPartData LeftArm =
-        Torso.addChild(
-            "LeftArm",
-            ModelPartBuilder.create()
-                .uv(0, 9)
-                .cuboid(0.0F, -0.5F, -0.5F, 1.0F, 3.0F, 1.0F, new Dilation(0.0F)),
-            ModelTransform.pivot(1.5F, -1.0F, 0.0F));
+    ModelPartData LeftArm = Torso.addChild("LeftArm", ModelPartBuilder.create().uv(0, 33).cuboid(0.0F, -2.0F, -2.0F, 4.0F, 11.0F, 4.0F, new Dilation(0.0F)), ModelTransform.pivot(5.5F, -3.5F, 0.0F));
 
-    ModelPartData RightArm =
-        Torso.addChild(
-            "RightArm",
-            ModelPartBuilder.create()
-                .uv(8, 6)
-                .cuboid(-1.0F, -0.5F, -0.5F, 1.0F, 3.0F, 1.0F, new Dilation(0.0F)),
-            ModelTransform.pivot(-1.5F, -1.0F, 0.0F));
+    ModelPartData RightArm = Torso.addChild("RightArm", ModelPartBuilder.create().uv(28, 22).cuboid(-4.0F, -2.0F, -2.0F, 4.0F, 11.0F, 4.0F, new Dilation(0.0F)), ModelTransform.pivot(-5.5F, -3.5F, 0.0F));
 
-    ModelPartData LeftLeg =
-        Torso.addChild(
-            "LeftLeg",
-            ModelPartBuilder.create()
-                .uv(8, 10)
-                .cuboid(-0.6F, -0.5F, -0.5F, 1.0F, 2.0F, 1.0F, new Dilation(0.0F)),
-            ModelTransform.pivot(1.0F, 1.0F, 0.0F));
+    ModelPartData LeftLeg = Torso.addChild("LeftLeg", ModelPartBuilder.create().uv(32, 37).cuboid(-2.0F, -3.0F, -2.0F, 4.0F, 7.0F, 4.0F, new Dilation(0.0F)), ModelTransform.pivot(3.0F, 5.5F, 0.0F));
 
-    ModelPartData RightLeg =
-        Torso.addChild(
-            "RightLeg",
-            ModelPartBuilder.create()
-                .uv(4, 9)
-                .cuboid(-0.4F, -0.5F, -0.5F, 1.0F, 2.0F, 1.0F, new Dilation(0.0F)),
-            ModelTransform.pivot(-1.0F, 1.0F, 0.0F));
-    return TexturedModelData.of(modelData, 16, 16);
+    ModelPartData RightLeg = Torso.addChild("RightLeg", ModelPartBuilder.create().uv(16, 37).cuboid(-2.0F, -3.0F, -2.0F, 4.0F, 7.0F, 4.0F, new Dilation(0.0F)), ModelTransform.pivot(-3.0F, 5.5F, 0.0F));
+    return TexturedModelData.of(modelData, 64, 64);
   }
 
   @Override
@@ -91,10 +53,13 @@ public class SmallClayGolemModel<T extends SmallClayGolemEntity> extends SingleP
     this.getPart().traverse().forEach(ModelPart::resetTransform);
     setHeadAngles(netHeadYaw, headPitch);
 
-    this.animateMovement(SmallClayGolemAnimations.WALK, limbSwing, limbSwingAmount, 2f, 2.5f);
-    this.updateAnimation(entity.idleAnimationState, SmallClayGolemAnimations.IDLE, ageInTicks, 1f);
+    this.animateMovement(SmallClayGolemAnimations.walk, limbSwing, limbSwingAmount, 2f, 2.5f);
+    this.updateAnimation(entity.idleAnimationState, SmallClayGolemAnimations.idle, ageInTicks, 1f);
     this.updateAnimation(
-        entity.attackAnimationState, SmallClayGolemAnimations.ATTACK, ageInTicks, 1f);
+        entity.attackAnimationState, SmallClayGolemAnimations.attack, ageInTicks, 1f);
+    this.updateAnimation(entity.sitSwayAnimationState, SmallClayGolemAnimations.sit_sway, ageInTicks, 1f);
+    this.updateAnimation(entity.sitWipAnimationState, SmallClayGolemAnimations.sit_wip, ageInTicks, 1f);
+    this.updateAnimation(entity.sitFlushAnimationState, SmallClayGolemAnimations.sit_flush, ageInTicks, 1f);
   }
 
   private void setHeadAngles(float headYaw, float headPitch) {
@@ -115,6 +80,7 @@ public class SmallClayGolemModel<T extends SmallClayGolemEntity> extends SingleP
       float green,
       float blue,
       float alpha) {
+
     smallclaygolem.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
   }
 
