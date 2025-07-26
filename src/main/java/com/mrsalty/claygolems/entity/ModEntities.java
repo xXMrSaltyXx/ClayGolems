@@ -1,7 +1,7 @@
 package com.mrsalty.claygolems.entity;
 
 import com.mrsalty.claygolems.ClayGolems;
-import com.mrsalty.claygolems.entity.custom.SmallClayGolemEntity;
+import com.mrsalty.claygolems.entity.small_clay_golem.SmallClayGolemEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.EntityDimensions;
@@ -12,6 +12,7 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 public class ModEntities {
+
   public static final EntityType<SmallClayGolemEntity> SMALL_CLAY_GOLEM =
       Registry.register(
           Registries.ENTITY_TYPE,

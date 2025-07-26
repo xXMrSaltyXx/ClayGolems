@@ -1,15 +1,14 @@
-package com.mrsalty.claygolems.entity.ai;
+package com.mrsalty.claygolems.entity.small_clay_golem.ai;
 
-import com.mrsalty.claygolems.ClayGolems;
-import com.mrsalty.claygolems.entity.animation.SmallClayGolemAnimations;
-import com.mrsalty.claygolems.entity.custom.SmallClayGolemEntity;
-import net.minecraft.entity.Attackable;
+import com.mrsalty.claygolems.entity.small_clay_golem.animation.SmallClayGolemAnimations;
+import com.mrsalty.claygolems.entity.small_clay_golem.SmallClayGolemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.util.Hand;
 
 public class SmallClayGolemAttackGoal extends MeleeAttackGoal {
+
   private final SmallClayGolemEntity ENTITY;
   private final int ATTACK_DELAY = 14;
   private final float ANIMATION_LENGTH = SmallClayGolemAnimations.attack.lengthInSeconds();

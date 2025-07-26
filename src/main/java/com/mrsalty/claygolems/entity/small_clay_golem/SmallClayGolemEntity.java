@@ -1,10 +1,8 @@
-package com.mrsalty.claygolems.entity.custom;
+package com.mrsalty.claygolems.entity.small_clay_golem;
 
-import com.mrsalty.claygolems.ClayGolems;
 import com.mrsalty.claygolems.entity.ModEntities;
-import com.mrsalty.claygolems.entity.ai.SmallClayGolemAttackGoal;
-import com.mrsalty.claygolems.entity.animation.SmallClayGolemAnimations;
-import java.util.logging.Level;
+import com.mrsalty.claygolems.entity.small_clay_golem.ai.SmallClayGolemAttackGoal;
+import com.mrsalty.claygolems.entity.small_clay_golem.animation.SmallClayGolemAnimations;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
@@ -64,13 +62,15 @@ public class SmallClayGolemEntity extends TameableEntity {
 
   private SitAnimation currentSitAnimation = SitAnimation.SIT_SWAY;
 
-  private void setupAnimationStates() {
+  private void updateAnimationStates() {
     if (this.idleAnimationCooldown <= 0) {
       this.idleAnimationCooldown = this.random.nextInt(40) + 80;
       this.idleAnimationState.start(this.age);
     } else {
       this.idleAnimationCooldown--;
     }
+
+    updateSitAnimationStates();
 
     if (this.isAttacking() && this.attackAnimationCooldown <= 0) {
       this.attackAnimationCooldown = (int) (20 * SmallClayGolemAnimations.attack.lengthInSeconds());
@@ -79,6 +79,13 @@ public class SmallClayGolemEntity extends TameableEntity {
       this.attackAnimationCooldown--;
     }
 
+    if (!this.isAttacking()) {
+      this.attackAnimationState.stop();
+    }
+
+  }
+
+  private void updateSitAnimationStates() {
     if (this.isSitting() && this.sitSwayAnimationCooldown <= 0 && this.sitWipAnimationCooldown <= 0
         && sitFlushAnimationCooldown <= 0) {
       int animationPick = currentSitAnimation == SitAnimation.NONE ? this.random.nextInt(3) + 1
@@ -113,10 +120,6 @@ public class SmallClayGolemEntity extends TameableEntity {
       if (this.sitFlushAnimationCooldown > 0) {
         this.sitFlushAnimationCooldown--;
       }
-    }
-
-    if (!this.isAttacking()) {
-      this.attackAnimationState.stop();
     }
 
     if (!this.isSitting()) {
@@ -160,7 +163,7 @@ public class SmallClayGolemEntity extends TameableEntity {
   public void tick() {
     super.tick();
     if (this.getWorld().isClient()) {
-      setupAnimationStates();
+      updateAnimationStates();
     }
   }
 

@@ -2,8 +2,8 @@ package com.mrsalty.claygolems;
 
 import com.mrsalty.claygolems.entity.ModEntities;
 import com.mrsalty.claygolems.entity.client.ModModelLayers;
-import com.mrsalty.claygolems.entity.client.SmallClayGolemModel;
-import com.mrsalty.claygolems.entity.client.SmallClayGolemRenderer;
+import com.mrsalty.claygolems.entity.small_clay_golem.client.SmallClayGolemModel;
+import com.mrsalty.claygolems.entity.small_clay_golem.client.SmallClayGolemRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
