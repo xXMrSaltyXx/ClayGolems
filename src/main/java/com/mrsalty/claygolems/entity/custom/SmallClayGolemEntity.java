@@ -1,8 +1,10 @@
 package com.mrsalty.claygolems.entity.custom;
 
+import com.mrsalty.claygolems.ClayGolems;
 import com.mrsalty.claygolems.entity.ModEntities;
 import com.mrsalty.claygolems.entity.ai.SmallClayGolemAttackGoal;
 import com.mrsalty.claygolems.entity.animation.SmallClayGolemAnimations;
+import java.util.logging.Level;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
@@ -24,11 +26,15 @@ import net.minecraft.util.Hand;
 import net.minecraft.world.EntityView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SmallClayGolemEntity extends TameableEntity {
+
   private static final TrackedData<Boolean> ATTACKING =
       DataTracker.registerData(SmallClayGolemEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
   public static final float ATTACK_RANGE = 2.0f;
+  private static final Logger log = LoggerFactory.getLogger(SmallClayGolemEntity.class);
 
   public final AnimationState idleAnimationState = new AnimationState();
   private int idleAnimationCooldown = 0;
@@ -49,6 +55,15 @@ public class SmallClayGolemEntity extends TameableEntity {
     super(entityType, world);
   }
 
+  private enum SitAnimation {
+    NONE,
+    SIT_SWAY,
+    SIT_WIP,
+    SIT_FLUSH
+  }
+
+  private SitAnimation currentSitAnimation = SitAnimation.SIT_SWAY;
+
   private void setupAnimationStates() {
     if (this.idleAnimationCooldown <= 0) {
       this.idleAnimationCooldown = this.random.nextInt(40) + 80;
@@ -64,19 +79,27 @@ public class SmallClayGolemEntity extends TameableEntity {
       this.attackAnimationCooldown--;
     }
 
-    if (this.isSitting() && this.sitSwayAnimationCooldown <= 0 && this.sitWipAnimationCooldown <= 0 && sitFlushAnimationCooldown <= 0 ) {
-      int animationPick = this.random.nextInt(3);
+    if (this.isSitting() && this.sitSwayAnimationCooldown <= 0 && this.sitWipAnimationCooldown <= 0
+        && sitFlushAnimationCooldown <= 0) {
+      int animationPick = currentSitAnimation == SitAnimation.NONE ? this.random.nextInt(3) + 1
+          : currentSitAnimation.ordinal();
       switch (animationPick) {
-        case 0:
-          this.sitSwayAnimationCooldown = (int) (SmallClayGolemAnimations.sit_sway.lengthInSeconds() * 20);
+        case 1:
+          this.currentSitAnimation = SitAnimation.SIT_SWAY;
+          this.sitSwayAnimationCooldown = (int) (SmallClayGolemAnimations.sit_sway.lengthInSeconds()
+              * 20);
           this.sitSwayAnimationState.start(this.age);
           break;
-        case 1:
-          this.sitWipAnimationCooldown = (int) (SmallClayGolemAnimations.sit_wip.lengthInSeconds() * 20);
+        case 2:
+          this.currentSitAnimation = SitAnimation.SIT_WIP;
+          this.sitWipAnimationCooldown = (int) (SmallClayGolemAnimations.sit_wip.lengthInSeconds()
+              * 20);
           this.sitWipAnimationState.start(this.age);
           break;
-        default:
-          this.sitFlushAnimationCooldown = (int) (SmallClayGolemAnimations.sit_flush.lengthInSeconds() * 20);
+        case 3:
+          this.currentSitAnimation = SitAnimation.SIT_FLUSH;
+          this.sitFlushAnimationCooldown = (int) (
+              SmallClayGolemAnimations.sit_flush.lengthInSeconds() * 20);
           this.sitFlushAnimationState.start(this.age);
           break;
       }
@@ -97,9 +120,13 @@ public class SmallClayGolemEntity extends TameableEntity {
     }
 
     if (!this.isSitting()) {
+      this.currentSitAnimation = SitAnimation.NONE;
       this.sitSwayAnimationState.stop();
+      this.sitSwayAnimationCooldown = 0;
       this.sitWipAnimationState.stop();
+      this.sitWipAnimationCooldown = 0;
       this.sitFlushAnimationState.stop();
+      this.sitFlushAnimationCooldown = 0;
     }
   }
 
@@ -140,11 +167,11 @@ public class SmallClayGolemEntity extends TameableEntity {
   @Override
   protected void initGoals() {
     this.goalSelector.add(0, new SwimGoal(this));
-    this.goalSelector.add(2, new SitGoal(this));
-    this.goalSelector.add(1, new SmallClayGolemAttackGoal(this, 1D, true));
-    this.goalSelector.add(2, new WanderAroundFarGoal(this, 1.0f));
+    this.goalSelector.add(1, new SitGoal(this));
+    this.goalSelector.add(2, new SmallClayGolemAttackGoal(this, 1D, true));
     this.goalSelector.add(3, new LookAtEntityGoal(this, PlayerEntity.class, 4f));
-    this.goalSelector.add(4, new LookAroundGoal(this));
+    this.goalSelector.add(4, new WanderAroundFarGoal(this, 1.0f));
+    this.goalSelector.add(5, new LookAroundGoal(this));
 
     this.targetSelector.add(1, new RevengeGoal(this).setGroupRevenge());
   }
@@ -158,11 +185,19 @@ public class SmallClayGolemEntity extends TameableEntity {
 
   @Override
   public ActionResult interactMob(PlayerEntity player, Hand hand) {
-    this.setSitting(!this.isSitting());
-    this.jumping = false;
-    this.navigation.stop();
-    this.setTarget(null);
-    return ActionResult.SUCCESS;
+    ActionResult actionResult = super.interactMob(player, hand);
+
+    if (!actionResult.isAccepted()) {
+      this.setTamed(true);
+      boolean sitCache = this.isSitting();
+      this.setSitting(!this.isSitting());
+      this.jumping = false;
+      this.navigation.stop();
+      this.setTarget(null);
+      return ActionResult.SUCCESS;
+    }
+
+    return actionResult;
   }
 
   @Override
@@ -187,6 +222,6 @@ public class SmallClayGolemEntity extends TameableEntity {
 
   @Override
   public EntityView method_48926() {
-    return null;
+    return this.getWorld();
   }
 }
